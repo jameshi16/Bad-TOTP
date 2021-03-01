@@ -13,9 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Install build-essential
+      run: apt-get -y install build-essential
     - name: Build test executable
       run: |
         cd tests
-        cc -o /tmp/test test.c
+        cc -o test test.c
     - name: Run test executable
-      run: /tmp/test
+      run: ./test
