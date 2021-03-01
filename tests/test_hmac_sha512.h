@@ -1,0 +1,93 @@
+#ifndef TEST_HMAC_SHA512
+#define TEST_HMAC_SHA512
+
+#include "../sha512.h"
+#include "../hmac.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+int test_hmac_sha512_helper(const void* msg, size_t size, const void* key, size_t keySize, const char* expected) {
+  printf("Message: %s\n", (const char*) msg);
+  printf("Expected: %s\n", expected);
+
+  uint8_t* data = hmac(msg, size, key, keySize, (void* (*) (const void*, size_t)) sha512, 128, 64);
+  char result[128];
+  for (int i = 0; i < 64; i++) {
+    sprintf(result + i * 2, "%02x", data[i]);
+  }
+  printf("Actual:   %s\n", result);
+
+  int compareResult = strcmp(result, expected);
+  compareResult ? printf("Failed\n\n") : printf("Passed\n\n");
+  free(data);
+  return compareResult;
+}
+
+int test_hmac_sha512() {
+  const char key1[] = "Jefe";
+  const char key2[] = {
+    0x0b, 0x0b, 0x0b, 0x0b,
+    0x0b, 0x0b, 0x0b, 0x0b,
+    0x0b, 0x0b, 0x0b, 0x0b,
+    0x0b, 0x0b, 0x0b, 0x0b,
+    0x0b, 0x0b, 0x0b, 0x0b
+  };
+  const char key3[] = {
+    0x0c, 0x0c, 0x0c, 0x0c,
+    0x0c, 0x0c, 0x0c, 0x0c,
+    0x0c, 0x0c, 0x0c, 0x0c,
+    0x0c, 0x0c, 0x0c, 0x0c,
+    0x0c, 0x0c, 0x0c, 0x0c
+  };
+  const uint8_t key4[] = {
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
+    0xaa
+  };
+  const char message1[] = "what do ya want for nothing?";
+  const char message2[] = "Hi There";
+  const char message3[] = "Test With Truncation";
+  const char message4[] = "Test Using Larger Than Block-Size Key - Hash Key First";
+
+  const char result1[] = "164b7a7bfcf819e2e395fbe73b56e0a387bd64222e831fd610270cd7ea2505549758bf75c05a994a6d034f65f8f0e6fdcaeab1a34d4a6b4b636e070a38bce737";
+  const char result2[] = "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854";
+  const char result3[] = "415fad6271580a531d4179bc891d87a650188707922a4fbb36663a1eb16da008711c5b50ddd0fc235084eb9d3364a1454fb2ef67cd1d29fe6773068ea266e96b";
+  const char result4[] = "80b24263c7c1a3ebb71493c1dd7be8b49b46d1f41b4aeec1121b013783f8f3526b56d037e05f2598bd0fd2215d6a1e5295e64f73f63f0aec8b915a985d786598";
+
+  int result = 0;
+
+  result += test_hmac_sha512_helper(message1, sizeof(message1) - 1, key1, sizeof(key1) - 1, result1) ? 1 : 0;
+  result += test_hmac_sha512_helper(message2, sizeof(message2) - 1, key2, sizeof(key2), result2) ? 1 : 0;
+  result += test_hmac_sha512_helper(message3, sizeof(message3) - 1, key3, sizeof(key3), result3) ? 1 : 0;
+  result += test_hmac_sha512_helper(message4, sizeof(message4) - 1, key4, sizeof(key4), result4) ? 1 : 0;
+
+  return result;
+}
+
+#endif
