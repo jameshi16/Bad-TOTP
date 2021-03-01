@@ -1,5 +1,7 @@
 # Bad-TOTP
 
+[![Tests](https://github.com/jameshi16/Bad-TOTP/actions/workflows/tests.yml/badge.svg)](https://github.com/jameshi16/Bad-TOTP/actions/workflows/tests.yml)
+
 Prefixed with "Bad" because this is not meant to be used in production.
 
 Bad-TOTP is a small educational-only project that I decided to do in a weekend to learn about Time-based One Time Passwords (TOTP), and how they work. I then made the decision to implement everything required for TOTPs from scratch (i.e. using nothing but standard C and some standard library functions), including the SHA-1 hash algorithm (and its brothers, SHA-256 and SHA-512), Hash-based Message Authentication Code (HMAC), and Hash-based One Time Passwords (HOTP).
