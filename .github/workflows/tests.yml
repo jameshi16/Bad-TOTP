@@ -18,4 +18,6 @@ jobs:
         cd tests
         cc -o test test.c -lm
     - name: Run test executable
-      run: ./test
+      run: |
+       cd tests
+       ./test
