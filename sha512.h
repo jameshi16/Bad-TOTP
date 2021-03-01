@@ -5,9 +5,9 @@
 #ifndef SHA3_H
 #define SHA3_H
 
-#include <cstring>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SHA512_WORD uint64_t
 
@@ -62,7 +62,7 @@ SHA512_WORD sha512_SSIG1(SHA512_WORD X) {
   return sha512_ROTR(X, 19) ^ sha512_ROTR(X, 61) ^ (X >> 6);
 }
 
-uint8_t* sha512_pad(const void* msg, size_t size, size_t* newSize = NULL) {
+uint8_t* sha512_pad(const void* msg, size_t size, size_t* newSize) {
   if (!msg) {
     return 0;
   }
@@ -116,7 +116,7 @@ uint8_t* sha512(const void* msg, size_t size) {
   SHA512_WORD h7 = 0x5be0cd19137e2179;
   
   size_t messageSize;
-  const uint8_t* message = sha512_pad(msg, size, &messageSize);
+  uint8_t* message = sha512_pad(msg, size, &messageSize);
   for (int i = 0; i < messageSize; i += 128) {
     int t;
     const uint8_t* block = message + i;
@@ -170,7 +170,7 @@ uint8_t* sha512(const void* msg, size_t size) {
     h7 += H;
   }
 
-  delete message;
+  free(message);
   uint8_t* retVal = (uint8_t*) malloc(128);
   SHA512_WORD* retValView = (SHA512_WORD*) retVal;
   retValView[0] = h0;

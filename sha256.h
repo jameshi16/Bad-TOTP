@@ -5,9 +5,9 @@
 #ifndef SHA2_H
 #define SHA2_H
 
-#include <cstring>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SHA2_WORD uint32_t
 
@@ -58,7 +58,7 @@ SHA2_WORD sha2_SSIG1(SHA2_WORD X) {
   return sha2_ROTR(X, 17) ^ sha2_ROTR(X, 19) ^ (X >> 10);
 }
 
-uint8_t* sha2_pad(const void* msg, size_t size, size_t* newSize = NULL) {
+uint8_t* sha2_pad(const void* msg, size_t size, size_t* newSize) {
   if (!msg) {
     return 0;
   }
@@ -102,7 +102,7 @@ uint8_t* sha256(const void* msg, size_t size) {
   SHA2_WORD h7 = 0x5be0cd19;
 
   size_t messageSize;
-  const uint8_t* message = sha2_pad(msg, size, &messageSize);
+  uint8_t* message = sha2_pad(msg, size, &messageSize);
   for (int i = 0; i < messageSize; i += 64) {
     int t;
     const uint8_t* block = message + i;
@@ -151,7 +151,7 @@ uint8_t* sha256(const void* msg, size_t size) {
     h7 += H;
   }
 
-  delete message;
+  free(message);
   uint8_t* retVal = (uint8_t*) malloc(32);
   SHA2_WORD* retValView = (SHA2_WORD*) retVal;
   retValView[0] = h0;

@@ -9,7 +9,7 @@
 #include <math.h>
 #include "hmac.h"
 
-struct hotp_context {
+typedef struct {
   uint64_t counter;
   const uint8_t* secret;
   size_t secretSize;
@@ -17,7 +17,7 @@ struct hotp_context {
   void* (*hashFn)(const void*, size_t);
   size_t blockSize;
   size_t outputLength;
-};
+} hotp_context;
 
 uint32_t hotp_DT(const uint8_t* data, size_t len) {
   uint8_t offset = data[len - 1] & 0x0f;
@@ -29,7 +29,7 @@ uint32_t hotp_DT(const uint8_t* data, size_t len) {
   return p;
 }
 
-uint32_t hotp(hotp_context *ctx, uint8_t digits = 6) {
+uint32_t hotp(hotp_context *ctx, uint8_t digits) {
   if (!ctx) {
     return 0;
   }
@@ -48,7 +48,7 @@ uint32_t hotp(hotp_context *ctx, uint8_t digits = 6) {
 
   uint32_t Snum = hotp_DT(hs, ctx->outputLength);
   free(hs);
-  return Snum % (uint32_t) pow(10, digits);
+  return Snum % (uint32_t) pow(10.0, digits);
 }
 
 #endif

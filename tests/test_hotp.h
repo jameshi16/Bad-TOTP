@@ -21,8 +21,8 @@ int test_hotp() {
   int failedOnce = 0;
   for (int i = 0; i < 10; i++) {
     ctx.counter = i;
-    uint32_t otp = hotp(&ctx);
-    printf("Count: %d, Expected: %d, Actual: %d\n", i, expected[i], hotp(&ctx));
+    uint32_t otp = hotp(&ctx, 6);
+    printf("Count: %d, Expected: %d, Actual: %d\n", i, expected[i], otp);
 
     if (otp != expected[i]) {
       failedOnce = 1;

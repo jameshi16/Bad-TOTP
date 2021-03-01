@@ -21,7 +21,7 @@ uint8_t* hmac(const void* msg, size_t size, const void* K, size_t keySize, void*
   if (keySize > blockSize) {
     uint8_t *temp = (uint8_t*) H(K, keySize);
     workingKey = hmac_pad(temp, outputLength, blockSize);
-    delete temp;
+    free(temp);
   } else {
     workingKey = hmac_pad(workingKey, keySize, blockSize);
   }

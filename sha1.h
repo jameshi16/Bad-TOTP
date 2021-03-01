@@ -8,9 +8,9 @@
 #ifndef SHA1_H
 #define SHA1_H
 
-#include <cstring>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* We want exact 32bits; uint_fast32_t sometimes assign a type larger than 32bits */
 #define SHA1_WORD uint32_t
@@ -48,7 +48,7 @@ SHA1_WORD sha1_Sn(SHA1_WORD X, uint8_t n) {
 }
 
 // return copy of array that is padded
-uint8_t* sha1_pad(const void* msg, size_t size, size_t* newSize = NULL) {
+uint8_t* sha1_pad(const void* msg, size_t size, size_t* newSize) {
   if (!msg) {
     return 0;
   }
