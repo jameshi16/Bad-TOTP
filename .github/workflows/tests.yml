@@ -1,0 +1,21 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build test executable
+      run: |
+        cd tests
+        cc -o /tmp/test test.c
+    - name: Run test executable
+      run: /tmp/test
