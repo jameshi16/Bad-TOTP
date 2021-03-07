@@ -40,4 +40,4 @@ Given that your secret is the perfect length, i.e. divisible by the output lengt
 
 ## Relevant blog post
 
-Coming soon.
+[Implementing TOTPs from scratch](https://codingindex.xyz/2021/03/07/totp-from-scratch/)
