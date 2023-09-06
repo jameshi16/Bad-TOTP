@@ -44,7 +44,7 @@ SHA1_WORD sha1_K(uint8_t t) {
 }
 
 SHA1_WORD sha1_Sn(SHA1_WORD X, uint8_t n) {
-  return (X << n) | (X >> 32 - n);
+  return (X << n) | (X >> (32 - n));
 }
 
 // return copy of array that is padded
